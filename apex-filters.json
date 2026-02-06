@@ -19,7 +19,7 @@
     {
       "id": "uppercase",
       "title": "Uppercase",
-      "description": "Converts all plain text in the document to uppercase.",
+      "description": "Lua filter: Converts all plain text in the document to uppercase.",
       "author": "Brett Terpstra",
       "homepage": "https://github.com/ApexMarkdown/apex-filter-uppercase",
       "repo": "https://github.com/ApexMarkdown/apex-filter-uppercase"
@@ -27,7 +27,7 @@
     {
       "id": "unwrap",
       "title": "Unwrap",
-      "description": "Unwraps elements starting with `< `",
+      "description": "Lua filter: Unwraps elements starting with `< `",
       "author": "Brett Terpstra",
       "homepage": "https://github.com/ApexMarkdown/apex-filter-unwrap",
       "repo": "https://github.com/ApexMarkdown/apex-filter-unwrap"
