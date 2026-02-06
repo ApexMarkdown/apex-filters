@@ -23,6 +23,14 @@
       "author": "Brett Terpstra",
       "homepage": "https://github.com/ApexMarkdown/apex-filter-uppercase",
       "repo": "https://github.com/ApexMarkdown/apex-filter-uppercase"
+    },
+    {
+      "id": "unwrap",
+      "title": "Unwrap",
+      "description": "Unwraps elements starting with `< `",
+      "author": "Brett Terpstra",
+      "homepage": "https://github.com/ApexMarkdown/apex-filter-unwrap",
+      "repo": "https://github.com/ApexMarkdown/apex-filter-unwrap"
     }
   ]
 }
