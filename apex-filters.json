@@ -1,0 +1,20 @@
+{
+  "filters": [
+    {
+      "id": "title",
+      "title": "Title",
+      "description": "Adds a title to the document.",
+      "author": "Brett Terpstra",
+      "homepage": "https://github.com/ApexMarkdown/apex-filter-title",
+      "repo": "https://github.com/ApexMarkdown/apex-filter-title"
+    },
+    {
+      "id": "delink",
+      "title": "Delink",
+      "description": "Converts links to plain text.",
+      "author": "Brett Terpstra",
+      "homepage": "https://github.com/ApexMarkdown/apex-filter-delink",
+      "repo": "https://github.com/ApexMarkdown/apex-filter-delink"
+    }
+  ]
+}
