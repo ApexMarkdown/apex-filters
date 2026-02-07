@@ -1,0 +1,2 @@
+Content included by code-includes filter.
+This line is from tests/fixtures/included.txt.

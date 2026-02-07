@@ -48,10 +48,14 @@ clone_filter() {
   if [[ -n "$path" ]]; then
     # Single-file install: clone to temp, copy path to filters/<basename(path)>, rm temp (matches CLI)
     local dest_file="$FILTERS_ROOT/$(basename "$path")"
-    local temp="$FILTERS_ROOT/.apex_test_$id"
     if [[ -f "$dest_file" ]]; then
       echo "  (already installed)"
+    elif [[ -f "$REPO_ROOT/$path" ]]; then
+      # Use local file when running tests from the same repo (e.g. apex-filters with contrib/)
+      cp "$REPO_ROOT/$path" "$dest_file"
+      chmod +x "$dest_file"
     else
+      local temp="$FILTERS_ROOT/.apex_test_$id"
       git clone --depth 1 --quiet "$repo" "$temp"
       cp "$temp/$path" "$dest_file"
       chmod +x "$dest_file"
