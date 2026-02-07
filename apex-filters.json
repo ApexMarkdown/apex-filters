@@ -30,10 +30,21 @@
       "description": "Lua filter: Unwraps elements starting with `< `",
       "author": "Brett Terpstra",
       "requires": {
-        "lua_rocks": ["dkjson"]
+        "lua_rocks": [
+          "dkjson"
+        ]
       },
       "homepage": "https://github.com/ApexMarkdown/apex-filter-unwrap",
       "repo": "https://github.com/ApexMarkdown/apex-filter-unwrap"
+    },
+    {
+      "id": "code-includes",
+      "title": "Code includes",
+      "description": "Include code from a separate file: code block with inc=yes uses block content as file path.",
+      "author": "Aman Verma",
+      "homepage": "https://github.com/averms/pandoc-filters",
+      "repo": "https://github.com/averms/pandoc-filters",
+      "path": "src/code-includes.lua"
     }
   ]
 }

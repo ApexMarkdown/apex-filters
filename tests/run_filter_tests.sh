@@ -46,14 +46,15 @@ clone_filter() {
   local dest="$FILTERS_ROOT/$id"
 
   if [[ -n "$path" ]]; then
-    # Single-file install: clone to temp, copy path to filters/<id>, rm temp
+    # Single-file install: clone to temp, copy path to filters/<basename(path)>, rm temp (matches CLI)
+    local dest_file="$FILTERS_ROOT/$(basename "$path")"
     local temp="$FILTERS_ROOT/.apex_test_$id"
-    if [[ -f "$dest" ]]; then
+    if [[ -f "$dest_file" ]]; then
       echo "  (already installed)"
     else
       git clone --depth 1 --quiet "$repo" "$temp"
-      cp "$temp/$path" "$dest"
-      chmod +x "$dest"
+      cp "$temp/$path" "$dest_file"
+      chmod +x "$dest_file"
       rm -rf "$temp"
     fi
     return 0
@@ -101,9 +102,10 @@ test_filter() {
   local out
   out="$(run_filter "$id" "$fixture")" || { echo "FAIL (apex exit)"; FAILED=$((FAILED + 1)); return 1; }
 
-  # Optional: run filter-specific assertion if function exists
-  if declare -f "test_$id" &>/dev/null; then
-    if ! "test_$id" "$out"; then
+  # Optional: run filter-specific assertion if function exists (id may contain hyphen -> use underscore in fn name)
+  local test_fn="test_${id//-/_}"
+  if declare -f "$test_fn" &>/dev/null; then
+    if ! "$test_fn" "$out"; then
       echo "FAIL (assertion)"; FAILED=$((FAILED + 1)); return 1
     fi
   fi
@@ -141,6 +143,13 @@ test_unwrap() {
   # Unwrap turns angle-prefixed paragraph into raw HTML
   echo "$out" | grep -q 'unwrap-me' || return 1
   echo "$out" | grep -q 'This block should be unwrapped to raw HTML' || return 1
+}
+
+test_code_includes() {
+  local out="$1"
+  # Filter replaces code block (inc + path) with file contents
+  echo "$out" | grep -q 'Content included by code-includes filter' || return 1
+  echo "$out" | grep -q 'This line is from tests/fixtures/included.txt' || return 1
 }
 
 # --- Main: read filters from JSON and test each ---
