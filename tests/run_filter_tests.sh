@@ -36,11 +36,29 @@ export XDG_CONFIG_HOME="$TMP_CONFIG"
 echo "Using temporary config: $TMP_CONFIG"
 echo ""
 
-# Clone a filter repo into filters/<id> and ensure the filter script is executable
+# Clone a filter repo into filters/<id> (or, if path is set, copy that single file to filters/<id>)
+# Usage: clone_filter ID REPO [PATH]
+# If PATH is set (e.g. "src/code-includes.lua"), clone to temp, copy PATH to filters/<id>, remove temp.
 clone_filter() {
   local id="$1"
   local repo="$2"
+  local path="$3"
   local dest="$FILTERS_ROOT/$id"
+
+  if [[ -n "$path" ]]; then
+    # Single-file install: clone to temp, copy path to filters/<id>, rm temp
+    local temp="$FILTERS_ROOT/.apex_test_$id"
+    if [[ -f "$dest" ]]; then
+      echo "  (already installed)"
+    else
+      git clone --depth 1 --quiet "$repo" "$temp"
+      cp "$temp/$path" "$dest"
+      chmod +x "$dest"
+      rm -rf "$temp"
+    fi
+    return 0
+  fi
+
   if [[ -d "$dest" ]]; then
     echo "  (already cloned)"
   else
@@ -64,9 +82,11 @@ run_filter() {
 }
 
 # Test one filter: clone, run, optional content check
+# Usage: test_filter ID REPO [PATH]
 test_filter() {
   local id="$1"
   local repo="$2"
+  local path="${3:-}"
   local fixture="$FIXTURES_DIR/$id.md"
 
   echo -n "Testing filter: $id ... "
@@ -76,7 +96,7 @@ test_filter() {
     return 0
   fi
 
-  clone_filter "$id" "$repo" || { echo "FAIL (clone)"; FAILED=$((FAILED + 1)); return 1; }
+  clone_filter "$id" "$repo" "$path" || { echo "FAIL (clone)"; FAILED=$((FAILED + 1)); return 1; }
 
   local out
   out="$(run_filter "$id" "$fixture")" || { echo "FAIL (apex exit)"; FAILED=$((FAILED + 1)); return 1; }
@@ -134,8 +154,9 @@ fi
 while read -r line; do
   id="$(echo "$line" | jq -r '.id')"
   repo="$(echo "$line" | jq -r '.repo')"
+  path="$(echo "$line" | jq -r '.path // empty')"
   [[ "$id" == "null" || "$repo" == "null" ]] && continue
-  test_filter "$id" "$repo" || true
+  test_filter "$id" "$repo" "$path" || true
   ((count++)) || true
 done < <(jq -c '.filters[]?' "$JSON_FILE")
 

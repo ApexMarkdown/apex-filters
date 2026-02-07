@@ -7,7 +7,9 @@ processor. It is consumed by the Apex CLI when you use:
 - `--filter ID` / `--filters` (for AST filters)
 
 The file `apex-filters.json` describes available **AST filters** that can be
-installed into `~/.config/apex/filters` and then enabled at runtime.
+installed into `~/.config/apex/filters` and then enabled at runtime. Each entry
+may optionally specify **`path`** (e.g. `"src/code-includes.lua"`) to install
+only that file from a repository instead of the whole repo.
 
 ## Filters
 
@@ -91,7 +93,7 @@ To propose a new filter for this directory:
 
 1. **Fork this repository** (apex-filters).
 
-2. **Update `apex-filters.json`** with your filter’s entry: `id`, `title`, `description`, `author`, `homepage`, and `repo` (and `requires` if it has dependencies, e.g. Lua rocks).
+2. **Update `apex-filters.json`** with your filter’s entry: `id`, `title`, `description`, `author`, `homepage`, and `repo` (and `requires` if it has dependencies, e.g. Lua rocks). Optionally add **`path`**: if the filter is a single file inside the repo (e.g. in a multi-filter repository), set `path` to that path (e.g. `"src/code-includes.lua"`). The CLI will clone the repo to a temporary directory, copy only that file into `~/.config/apex/filters/<id>`, then remove the clone. Without `path`, the entire repo is cloned into `~/.config/apex/filters/<id>/`.
 
 3. **Add tests:**
    - Add a **fixture** under `tests/fixtures/<id>.md`: a small Markdown file that demonstrates the filter (input that the filter changes in a visible way).
