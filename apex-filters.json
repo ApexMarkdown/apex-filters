@@ -29,6 +29,9 @@
       "title": "Unwrap",
       "description": "Lua filter: Unwraps elements starting with `< `",
       "author": "Brett Terpstra",
+      "requires": {
+        "lua_rocks": ["dkjson"]
+      },
       "homepage": "https://github.com/ApexMarkdown/apex-filter-unwrap",
       "repo": "https://github.com/ApexMarkdown/apex-filter-unwrap"
     }
